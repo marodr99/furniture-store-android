@@ -1,0 +1,2 @@
+rootProject.name = "Furniture-Android-App"
+include ':app'

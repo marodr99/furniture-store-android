@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Furniture-Android-App</string>
+    <string name="download">Download</string>
+    <string name="requiredDownloadMessage">Model has not been downloaded yet. <br/>Click on the download button.</string>
+</resources>
