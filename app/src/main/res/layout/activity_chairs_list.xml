@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ChairsListActivity">
+
+    <ProgressBar
+        android:id="@+id/chairsProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="@android:dimen/thumbnail_height"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/chairsListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

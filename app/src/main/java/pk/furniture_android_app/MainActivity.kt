@@ -2,13 +2,11 @@ package pk.furniture_android_app
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.assets.RenderableSource
 import com.google.ar.sceneform.rendering.ModelRenderable
@@ -27,14 +25,14 @@ class MainActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
         val storage = FirebaseStorage.getInstance()
-        val modelRef = storage.reference.child("football_table.glb")
+        val modelRef = storage.reference.child("chairs/football_table.glb")
 
         val arFragment = supportFragmentManager.findFragmentById(R.id.arFragment) as ArFragment
 
         findViewById<Button>(R.id.downloadBtn).setOnClickListener {
             try {
                 findViewById<TextView>(R.id.requiredDownloadMessage).visibility = View.GONE
-                val file = File.createTempFile("football_table", "glb")
+                val file = File.createTempFile("football_tabler", "glb")
                 modelRef.getFile(file).addOnSuccessListener {
                     buildModel(file)
                 }
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         arFragment.arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
-            if(hitTestResult.node != null) {
+            if (hitTestResult.node != null) {
                 val hitNode = hitTestResult.node
                 hitNode?.setParent(null)
             }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/chairCardImageView"
+            android:padding="5dp"
+            android:src="@drawable/no_image_available"/>
+        <TextView
+            android:id="@+id/chairCardTitle"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_toEndOf="@+id/chairCardImageView"
+            android:gravity="center|left"
+            android:textSize="20sp"
+            android:padding="15dp"
+            tools:ignore="RtlHardcoded" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_toEndOf="@id/chairCardImageView"
+            android:layout_below="@id/chairCardTitle"
+            android:gravity="bottom|left"
+            android:textSize="20sp"
+            android:padding="15dp"
+            android:text="@string/cardPriceText"
+            tools:ignore="RtlHardcoded" />
+        <TextView
+            android:id="@+id/chairCardPrice"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_toEndOf="@id/chairCardImageView"
+            android:layout_below="@+id/chairCardTitle"
+            android:gravity="bottom|right"
+            android:textSize="20sp"
+            android:padding="15dp"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
