@@ -28,11 +28,15 @@ class ChairsListActivity : AppCompatActivity() {
         val chairsApiService =
             RetrofitClientInstance.getRetrofitInstance()?.create(ChairsApiService::class.java)
 
-        val allChairsCall = chairsApiService?.getAllChairs(0)
+        val allChairsCall = chairsApiService?.getAllChairs(intent.getIntExtra("currentPage", 0))
         allChairsCall?.enqueue(object : Callback<ChairResponse> {
             override fun onResponse(call: Call<ChairResponse>, response: Response<ChairResponse>) {
                 progressBar.visibility = View.GONE
-                response.body()?.let { adapter.setData(it.chairsFromSelectedPage) }
+
+                response.body()?.let {
+                    adapter.setData(it.chairsFromSelectedPage)
+                    setPages(it)
+                }
             }
 
             override fun onFailure(call: Call<ChairResponse>, t: Throwable) {
@@ -40,6 +44,30 @@ class ChairsListActivity : AppCompatActivity() {
                 Toast.makeText(this@ChairsListActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun setPages(response: ChairResponse) {
+        val previousButton: Button = findViewById(R.id.previousPageButton)
+        val nextButton: Button = findViewById(R.id.nextPageButton)
+        val allPagesTxt: TextView = findViewById(R.id.allPages)
+        val currentPageTxt: TextView = findViewById(R.id.currentPageNumber)
+
+        val currentPage = intent.getIntExtra("currentPage", 0)
+
+        currentPageTxt.text = (currentPage + 1).toString()
+        allPagesTxt.text = response.totalNumberOfPages.toString()
+        previousButton.setOnClickListener {
+            if (currentPage > 0) {
+                intent.putExtra("currentPage", currentPage - 1)
+                recreate()
+            }
+        }
+        nextButton.setOnClickListener {
+            if (currentPage < response.totalNumberOfPages - 1) {
+                intent.putExtra("currentPage", currentPage + 1)
+                recreate()
+            }
+        }
     }
 
     private fun setupRecyclerView() {

@@ -3,4 +3,8 @@
     <string name="download">Download</string>
     <string name="requiredDownloadMessage">Model has not been downloaded yet. <br />Click on the download button.</string>
     <string name="cardPriceText">Price:</string>
+    <string name="currentPage">Page:</string>
+    <string name="all_pages">All Pages:</string>
+    <string name="previousButton">Previous</string>
+    <string name="nextButton">Next</string>
 </resources>
