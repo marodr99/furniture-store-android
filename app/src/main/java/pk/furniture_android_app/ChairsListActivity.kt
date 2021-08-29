@@ -88,6 +88,12 @@ class ChairsListActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = findViewById(R.id.chairsRecyclerView)
+        adapter.onItemClickListener = object : OnRecyclerViewClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(this@ChairsListActivity, position.toString(), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
