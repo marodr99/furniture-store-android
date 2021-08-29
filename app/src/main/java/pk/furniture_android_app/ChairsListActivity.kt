@@ -1,7 +1,9 @@
 package pk.furniture_android_app
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +57,20 @@ class ChairsListActivity : AppCompatActivity() {
         val currentPage = intent.getIntExtra("currentPage", 0)
 
         currentPageTxt.text = (currentPage + 1).toString()
+        currentPageTxt.isCursorVisible = true
+        currentPageTxt.isFocusableInTouchMode = true
+        currentPageTxt.inputType = InputType.TYPE_CLASS_TEXT
+        currentPageTxt.setOnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val page = Integer.valueOf(textView.text.toString()) - 1
+                if (page <= response.totalNumberOfPages - 1 && page >= 0) {
+                    intent.putExtra("currentPage", page)
+                    recreate()
+                    return@setOnEditorActionListener true
+                }
+            }
+            return@setOnEditorActionListener false
+        }
         allPagesTxt.text = response.totalNumberOfPages.toString()
         previousButton.setOnClickListener {
             if (currentPage > 0) {
