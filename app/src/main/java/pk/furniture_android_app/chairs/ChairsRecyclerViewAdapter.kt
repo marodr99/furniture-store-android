@@ -42,7 +42,7 @@ class ChairsRecyclerViewAdapter() :
         holder.chairCardTitle.text = chair.title
         holder.chairCardPrice.text = chair.price.toString() + " zł"
         if (chair.imageUrl != null && chair.imageUrl.isNotBlank())
-            Glide.with(holder.itemView.context).load(chair.imageUrl)
+            Glide.with(holder.itemView.context).load(chair.imageUrl.split('^')[0])
                 .placeholder(R.drawable.no_image_available).into(holder.chairCardImage)
         else
             Glide.with(holder.itemView.context).load(R.drawable.no_image_available)

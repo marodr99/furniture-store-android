@@ -1,5 +1,6 @@
 package pk.furniture_android_app
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -8,8 +9,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import pk.furniture_android_app.chairs.ChairsApiService
 import pk.furniture_android_app.chairs.ChairsRecyclerViewAdapter
+import pk.furniture_android_app.models.chairs.Chair
 import pk.furniture_android_app.models.chairs.ChairResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,6 +20,7 @@ import retrofit2.Response
 
 class ChairsListActivity : AppCompatActivity() {
     private val adapter by lazy { ChairsRecyclerViewAdapter() }
+    private var chairs: List<Chair> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,7 @@ class ChairsListActivity : AppCompatActivity() {
 
                 response.body()?.let {
                     adapter.setData(it.chairsFromSelectedPage)
+                    chairs = it.chairsFromSelectedPage
                     setPages(it)
                 }
             }
@@ -90,8 +95,13 @@ class ChairsListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.chairsRecyclerView)
         adapter.onItemClickListener = object : OnRecyclerViewClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(this@ChairsListActivity, position.toString(), Toast.LENGTH_SHORT)
-                    .show()
+                val gson = Gson()
+                val chairJson = gson.toJson(chairs[position])
+                val intent =
+                    Intent(this@ChairsListActivity, SingleChairActivity::class.java).apply {
+                        putExtra("chair", chairJson)
+                    }
+                startActivity(intent)
             }
         }
         recyclerView.adapter = adapter
