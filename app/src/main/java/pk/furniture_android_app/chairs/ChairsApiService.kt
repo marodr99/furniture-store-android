@@ -1,10 +1,11 @@
 package pk.furniture_android_app.chairs
 
-import pk.furniture_android_app.models.Chair
+import pk.furniture_android_app.models.chairs.ChairResponse
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface ChairsApiService {
-    @GET("/furniture/chairs")
-    fun getAllChairs(): Call<List<Chair>>
+    @GET("/furniture/chairs/{page}")
+    fun getAllChairs(@Path("page") page: Int): Call<ChairResponse>
 }

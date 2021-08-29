@@ -1,4 +1,4 @@
-package pk.furniture_android_app.models
+package pk.furniture_android_app.models.chairs
 
 import com.google.gson.annotations.SerializedName
 

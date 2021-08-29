@@ -1,21 +1,20 @@
 package pk.furniture_android_app
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import pk.furniture_android_app.chairs.ChairsApiService
-import pk.furniture_android_app.chairs.ChairsListViewAdapter
-import pk.furniture_android_app.models.Chair
+import pk.furniture_android_app.chairs.ChairsRecyclerViewAdapter
+import pk.furniture_android_app.models.chairs.ChairResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ChairsListActivity : AppCompatActivity() {
-    private var adapter: ChairsListViewAdapter? = null
-    private var listview: ListView? = null
+    private val adapter by lazy { ChairsRecyclerViewAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,29 +23,28 @@ class ChairsListActivity : AppCompatActivity() {
         val progressBar = findViewById<ProgressBar>(R.id.chairsProgressBar)
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
+        setupRecyclerView()
 
         val chairsApiService =
             RetrofitClientInstance.getRetrofitInstance()?.create(ChairsApiService::class.java)
 
-        val allChairsCall = chairsApiService?.getAllChairs()
-        allChairsCall?.enqueue(object : Callback<List<Chair>> {
-            override fun onResponse(call: Call<List<Chair>>, response: Response<List<Chair>>) {
+        val allChairsCall = chairsApiService?.getAllChairs(0)
+        allChairsCall?.enqueue(object : Callback<ChairResponse> {
+            override fun onResponse(call: Call<ChairResponse>, response: Response<ChairResponse>) {
                 progressBar.visibility = View.GONE
-                response.body()?.let { populateListView(it) }
+                response.body()?.let { adapter.setData(it.chairsFromSelectedPage) }
             }
 
-            override fun onFailure(call: Call<List<Chair>>, t: Throwable) {
+            override fun onFailure(call: Call<ChairResponse>, t: Throwable) {
                 progressBar.visibility = View.GONE
                 Toast.makeText(this@ChairsListActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
     }
 
-    private fun populateListView(chairs: List<Chair>) {
-        listview = findViewById(R.id.chairsListView)
-        adapter = ChairsListViewAdapter(chairs, this)
-        if (listview != null) {
-            listview!!.adapter = adapter
-        }
+    private fun setupRecyclerView() {
+        val recyclerView: RecyclerView = findViewById(R.id.chairsRecyclerView)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
