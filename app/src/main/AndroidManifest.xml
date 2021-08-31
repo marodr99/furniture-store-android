@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FurnitureAndroidApp">
-        <activity android:name=".SingleChairActivity"></activity>
+        <activity android:name=".SingleChairActivity" />
+        <activity android:name=".AugmentedRealityActivity" />
         <activity android:name=".ChairsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

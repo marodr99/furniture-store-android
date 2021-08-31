@@ -16,23 +16,26 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class AugmentedRealityActivity : AppCompatActivity() {
+    private val FIREBASE_PATH = "chairs/"
+    private val GLB_EXTENSION = ".glb"
     private var renderable: ModelRenderable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_augmented_reality)
 
         FirebaseApp.initializeApp(this)
         val storage = FirebaseStorage.getInstance()
-        val modelRef = storage.reference.child("chairs/football_table.glb")
+        val glbFileName = intent.getStringExtra("glbFileName")
+        val modelRef = storage.reference.child(FIREBASE_PATH + glbFileName + GLB_EXTENSION)
 
         val arFragment = supportFragmentManager.findFragmentById(R.id.arFragment) as ArFragment
 
         findViewById<Button>(R.id.downloadBtn).setOnClickListener {
             try {
                 findViewById<TextView>(R.id.requiredDownloadMessage).visibility = View.GONE
-                val file = File.createTempFile("football_tabler", "glb")
+                val file = File.createTempFile(glbFileName, GLB_EXTENSION)
                 modelRef.getFile(file).addOnSuccessListener {
                     buildModel(file)
                 }
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        arFragment.arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
+        arFragment.arSceneView.scene.addOnPeekTouchListener { hitTestResult, _ ->
             if (hitTestResult.node != null) {
                 val hitNode = hitTestResult.node
                 hitNode?.setParent(null)
