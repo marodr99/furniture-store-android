@@ -14,17 +14,17 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/chairCardImageView"
+            android:id="@+id/cardImageView"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:padding="5dp"
             android:src="@drawable/no_image_available" />
 
         <TextView
-            android:id="@+id/chairCardTitle"
+            android:id="@+id/cardTitle"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:layout_toEndOf="@+id/chairCardImageView"
+            android:layout_toEndOf="@+id/cardImageView"
             android:gravity="center|left"
             android:padding="15dp"
             android:textSize="20sp"
@@ -33,8 +33,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:layout_below="@id/chairCardTitle"
-            android:layout_toEndOf="@id/chairCardImageView"
+            android:layout_below="@id/cardTitle"
+            android:layout_toEndOf="@id/cardImageView"
             android:gravity="bottom|left"
             android:padding="15dp"
             android:text="@string/cardPriceText"
@@ -42,11 +42,11 @@
             tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:id="@+id/chairCardPrice"
+            android:id="@+id/cardPrice"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:layout_below="@+id/chairCardTitle"
-            android:layout_toEndOf="@id/chairCardImageView"
+            android:layout_below="@+id/cardTitle"
+            android:layout_toEndOf="@id/cardImageView"
             android:gravity="bottom|right"
             android:padding="15dp"
             android:textSize="20sp"

@@ -1,6 +1,7 @@
 package pk.furniture_android_app.models.chairs
 
 import com.google.gson.annotations.SerializedName
+import pk.furniture_android_app.models.furniture.FurnitureType
 
 class Chair {
     @SerializedName("id")
@@ -8,6 +9,15 @@ class Chair {
 
     @SerializedName("title")
     val title: String? = null
+
+    @SerializedName("price")
+    val price = 0.0
+
+    @SerializedName("imgUrl")
+    val imgUrl: String? = null
+
+    @SerializedName("furnitureType")
+    val furnitureType: FurnitureType? = null
 
     @SerializedName("maxWeight")
     val maxWeight = 0
@@ -24,10 +34,7 @@ class Chair {
     @SerializedName("color")
     val color: String? = null
 
-    @SerializedName("price")
-    val price = 0.0
-
-    @SerializedName("material")
+    @SerializedName("chairMaterial")
     val material: String? = null
 
     @SerializedName("additionalInformation")
@@ -36,10 +43,10 @@ class Chair {
     @SerializedName("stock")
     val stock = 0
 
-    @SerializedName("imageUrl")
-    val imageUrl: String? = null
-
     @SerializedName("fileName")
     val fileName: String? = null
+
+    @SerializedName("imagesUrl")
+    val imagesUrl: String? = null
 
 }

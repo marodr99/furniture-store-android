@@ -9,51 +9,53 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import pk.furniture_android_app.chairs.ChairsApiService
-import pk.furniture_android_app.chairs.ChairsRecyclerViewAdapter
-import pk.furniture_android_app.models.chairs.Chair
-import pk.furniture_android_app.models.chairs.ChairResponse
+import pk.furniture_android_app.furniture.FurnitureApiService
+import pk.furniture_android_app.furniture.FurnitureRecyclerViewAdapter
+import pk.furniture_android_app.models.furniture.Furniture
+import pk.furniture_android_app.models.furniture.FurnitureResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ChairsListActivity : AppCompatActivity() {
-    private val adapter by lazy { ChairsRecyclerViewAdapter() }
-    private var chairs: List<Chair> = emptyList()
+class FurnitureListActivity : AppCompatActivity() {
+    private val adapter by lazy { FurnitureRecyclerViewAdapter() }
+    private var furniture: List<Furniture> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chairs_list)
+        setContentView(R.layout.activity_furniture_list)
 
-        val progressBar = findViewById<ProgressBar>(R.id.chairsProgressBar)
+        val progressBar = findViewById<ProgressBar>(R.id.listProgressBar)
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
         setupRecyclerView()
 
-        val chairsApiService =
-            RetrofitClientInstance.getRetrofitInstance()?.create(ChairsApiService::class.java)
+        val furnitureApiService =
+            RetrofitClientInstance.getRetrofitInstance()?.create(FurnitureApiService::class.java)
 
-        val allChairsCall = chairsApiService?.getAllChairs(intent.getIntExtra("currentPage", 0))
-        allChairsCall?.enqueue(object : Callback<ChairResponse> {
-            override fun onResponse(call: Call<ChairResponse>, response: Response<ChairResponse>) {
+        val allFurnitureCall = furnitureApiService?.getAllFurniture(
+            "chairs",
+            intent.getIntExtra("currentPage", 0)
+        )
+        allFurnitureCall?.enqueue(object : Callback<FurnitureResponse> {
+            override fun onResponse(call: Call<FurnitureResponse>, response: Response<FurnitureResponse>) {
                 progressBar.visibility = View.GONE
 
                 response.body()?.let {
-                    adapter.setData(it.chairsFromSelectedPage)
-                    chairs = it.chairsFromSelectedPage
+                    adapter.setData(it.furnitureFromPage)
+                    furniture = it.furnitureFromPage
                     setPages(it)
                 }
             }
 
-            override fun onFailure(call: Call<ChairResponse>, t: Throwable) {
+            override fun onFailure(call: Call<FurnitureResponse>, t: Throwable) {
                 progressBar.visibility = View.GONE
-                Toast.makeText(this@ChairsListActivity, t.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@FurnitureListActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
     }
 
-    private fun setPages(response: ChairResponse) {
+    private fun setPages(response: FurnitureResponse) {
         val previousButton: Button = findViewById(R.id.previousPageButton)
         val nextButton: Button = findViewById(R.id.nextPageButton)
         val allPagesTxt: TextView = findViewById(R.id.allPages)
@@ -92,14 +94,14 @@ class ChairsListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val recyclerView: RecyclerView = findViewById(R.id.chairsRecyclerView)
+        val recyclerView: RecyclerView = findViewById(R.id.listRecyclerView)
         adapter.onItemClickListener = object : OnRecyclerViewClickListener {
             override fun onItemClick(position: Int) {
-                val gson = Gson()
-                val chairJson = gson.toJson(chairs[position])
+                val clickedFurniture = furniture[position]
                 val intent =
-                    Intent(this@ChairsListActivity, SingleChairActivity::class.java).apply {
-                        putExtra("chair", chairJson)
+                    Intent(this@FurnitureListActivity, SingleFurnitureActivity::class.java).apply {
+                        putExtra("furnitureType", clickedFurniture.furnitureType)
+                        putExtra("furnitureId", clickedFurniture.id)
                     }
                 startActivity(intent)
             }
