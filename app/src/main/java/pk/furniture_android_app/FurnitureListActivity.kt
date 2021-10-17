@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pk.furniture_android_app.furniture.FurnitureApiService
 import pk.furniture_android_app.furniture.FurnitureRecyclerViewAdapter
+import pk.furniture_android_app.models.chairs.ChairsSearchOptions
 import pk.furniture_android_app.models.furniture.Furniture
 import pk.furniture_android_app.models.furniture.FurnitureResponse
+import pk.furniture_android_app.models.furniture.FurnitureType
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +22,7 @@ import retrofit2.Response
 class FurnitureListActivity : AppCompatActivity() {
     private val adapter by lazy { FurnitureRecyclerViewAdapter() }
     private var furniture: List<Furniture> = emptyList()
+    private var selectedSearchOptions: HashMap<String, String> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,16 +32,14 @@ class FurnitureListActivity : AppCompatActivity() {
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
         setupRecyclerView()
+        setupSearchView()
 
-        val furnitureApiService =
-            RetrofitClientInstance.getRetrofitInstance()?.create(FurnitureApiService::class.java)
-
-        val allFurnitureCall = furnitureApiService?.getAllFurniture(
-            "chairs",
-            intent.getIntExtra("currentPage", 0)
-        )
+        val allFurnitureCall = createProperFurnitureCall(FurnitureType.CHAIRS)
         allFurnitureCall?.enqueue(object : Callback<FurnitureResponse> {
-            override fun onResponse(call: Call<FurnitureResponse>, response: Response<FurnitureResponse>) {
+            override fun onResponse(
+                call: Call<FurnitureResponse>,
+                response: Response<FurnitureResponse>
+            ) {
                 progressBar.visibility = View.GONE
 
                 response.body()?.let {
@@ -53,6 +54,55 @@ class FurnitureListActivity : AppCompatActivity() {
                 Toast.makeText(this@FurnitureListActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun setupSearchView() {
+        val mutableMap =
+            intent.getSerializableExtra("selectedSearchOptions")
+        if (mutableMap != null)
+            this.selectedSearchOptions = mutableMap as HashMap<String, String>
+
+        val searchView: SearchView = findViewById(R.id.searchViewFurniture)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(submitedText: String?): Boolean {
+                if (submitedText != null) {
+                    selectedSearchOptions["title"] = submitedText
+                    intent.putExtra("selectedSearchOptions", selectedSearchOptions)
+                    intent.putExtra("canRecreate", true)
+                    intent.putExtra("currentPage", 0)
+
+                    recreate()
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(submitedText: String?): Boolean {
+                if (submitedText.equals("")) {
+                    val canRecreate = intent.getBooleanExtra("canRecreate", false)
+                    if (canRecreate) {
+                        selectedSearchOptions["title"] = ""
+                        intent.putExtra("canRecreate", false)
+                        recreate()
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+    }
+
+    private fun createProperFurnitureCall(furnitureType: FurnitureType): Call<FurnitureResponse>? {
+        val furnitureApiService =
+            RetrofitClientInstance.getRetrofitInstance()?.create(FurnitureApiService::class.java)
+        when (furnitureType) {
+            FurnitureType.CHAIRS -> return furnitureApiService?.getSpecificChairs(
+                intent.getIntExtra(
+                    "currentPage",
+                    0
+                ), ChairsSearchOptions(selectedSearchOptions)
+            )
+            else -> throw IllegalArgumentException("Furniture of type $furnitureType does not exist")
+        }
     }
 
     private fun setPages(response: FurnitureResponse) {

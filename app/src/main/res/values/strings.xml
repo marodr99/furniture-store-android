@@ -9,4 +9,5 @@
     <string name="nextButton">Next</string>
     <string name="furniture_image_description">furniture image</string>
     <string name="check_in_3d">Check in 3d</string>
+    <string name="search_options">FILTER</string>
 </resources>
