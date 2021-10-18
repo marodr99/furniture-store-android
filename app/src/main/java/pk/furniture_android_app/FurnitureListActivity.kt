@@ -3,14 +3,18 @@ package pk.furniture_android_app
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
 import pk.furniture_android_app.furniture.FurnitureApiService
 import pk.furniture_android_app.furniture.FurnitureRecyclerViewAdapter
+import pk.furniture_android_app.models.SortOption
 import pk.furniture_android_app.models.chairs.ChairsSearchOptions
 import pk.furniture_android_app.models.furniture.Furniture
 import pk.furniture_android_app.models.furniture.FurnitureResponse
@@ -22,7 +26,7 @@ import retrofit2.Response
 class FurnitureListActivity : AppCompatActivity() {
     private val adapter by lazy { FurnitureRecyclerViewAdapter() }
     private var furniture: List<Furniture> = emptyList()
-    private var selectedSearchOptions: HashMap<String, String> = HashMap()
+    private var selectedSearchOptions: HashMap<String, String?> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,7 @@ class FurnitureListActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
         setupRecyclerView()
         setupSearchView()
+        setupFilterButton(FurnitureType.CHAIRS)
 
         val allFurnitureCall = createProperFurnitureCall(FurnitureType.CHAIRS)
         allFurnitureCall?.enqueue(object : Callback<FurnitureResponse> {
@@ -56,11 +61,82 @@ class FurnitureListActivity : AppCompatActivity() {
         })
     }
 
+    private fun setupFilterButton(furnitureType: FurnitureType) {
+        val filterButton: Button = findViewById(R.id.filterButton)
+        filterButton.setOnClickListener {
+            val inflater = this.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val additionalSearchOptionsView =
+                inflater.inflate(R.layout.additional_search_options, null)
+            prepareAdditionalSearchOptions(additionalSearchOptionsView, furnitureType)
+            val alert = AlertDialog.Builder(this)
+            alert.setView(additionalSearchOptionsView)
+            alert.setPositiveButton("Save") { _, _ ->
+                setSelectedSearchOptions(additionalSearchOptionsView)
+                intent.putExtra("selectedSearchOptions", selectedSearchOptions)
+                intent.putExtra("currentPage", 0)
+                recreate()
+            }
+            alert.show()
+        }
+    }
+
+    private fun prepareAdditionalSearchOptions(
+        additionalSearchOptionsView: View,
+        furnitureType: FurnitureType
+    ) {
+        fillTextOfExistingOptions(additionalSearchOptionsView)
+        val autoCompleteTextView: AutoCompleteTextView =
+            additionalSearchOptionsView.findViewById(R.id.sortOption)
+        autoCompleteTextView.setAdapter(
+            ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                SortOption.values()
+            )
+        )
+    }
+
+    private fun fillTextOfExistingOptions(additionalSearchOptionsView: View) {
+        for (key: String in selectedSearchOptions.keys) {
+            if (key == "title") continue
+            val text: TextView = additionalSearchOptionsView.findViewById(getSearchViewId(key))
+            if (text is AutoCompleteTextView)
+                text.setText(selectedSearchOptions[key].toString(), false)
+            else
+                text.text =
+                    if (selectedSearchOptions[key] == "0.0") null else selectedSearchOptions[key]
+        }
+    }
+
+    private fun getSearchViewId(key: String): Int {
+        when (key) {
+            "startPrice" -> return R.id.startPriceAlertDialog
+            "endPrice" -> return R.id.endPriceAlertDialog
+            "sortOption" -> return R.id.sortOption
+        }
+        throw java.lang.IllegalArgumentException("No such search option")
+    }
+
+    private fun setSelectedSearchOptions(additionalSearchOptionsView: View) {
+        val startPrice: TextInputEditText =
+            additionalSearchOptionsView.findViewById(R.id.startPriceAlertDialog)
+        val endPrice: TextInputEditText =
+            additionalSearchOptionsView.findViewById(R.id.endPriceAlertDialog)
+        val sortOption: AutoCompleteTextView =
+            additionalSearchOptionsView.findViewById(R.id.sortOption)
+        selectedSearchOptions["startPrice"] =
+            if (startPrice.text.isNullOrBlank()) "0.0" else startPrice.text.toString()
+        selectedSearchOptions["endPrice"] =
+            if (endPrice.text.isNullOrBlank()) "0.0" else endPrice.text.toString()
+        selectedSearchOptions["sortOption"] =
+            if (sortOption.text.isNullOrBlank()) null else sortOption.text.toString()
+    }
+
     private fun setupSearchView() {
         val mutableMap =
             intent.getSerializableExtra("selectedSearchOptions")
         if (mutableMap != null)
-            this.selectedSearchOptions = mutableMap as HashMap<String, String>
+            this.selectedSearchOptions = mutableMap as HashMap<String, String?>
 
         val searchView: SearchView = findViewById(R.id.searchViewFurniture)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -70,7 +146,6 @@ class FurnitureListActivity : AppCompatActivity() {
                     intent.putExtra("selectedSearchOptions", selectedSearchOptions)
                     intent.putExtra("canRecreate", true)
                     intent.putExtra("currentPage", 0)
-
                     recreate()
                 }
                 return true

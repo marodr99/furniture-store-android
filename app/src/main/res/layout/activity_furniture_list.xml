@@ -41,6 +41,7 @@
                 app:layout_constraintWidth_percent="0.65" />
 
             <Button
+                android:id="@+id/filterButton"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="5dp"
