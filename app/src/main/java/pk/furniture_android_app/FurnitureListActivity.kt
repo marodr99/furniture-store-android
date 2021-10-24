@@ -1,17 +1,22 @@
 package pk.furniture_android_app
 
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import pk.furniture_android_app.furniture.FurnitureApiService
 import pk.furniture_android_app.furniture.FurnitureRecyclerViewAdapter
 import pk.furniture_android_app.models.SortOption
@@ -19,6 +24,7 @@ import pk.furniture_android_app.models.chairs.ChairsSearchOptions
 import pk.furniture_android_app.models.furniture.Furniture
 import pk.furniture_android_app.models.furniture.FurnitureResponse
 import pk.furniture_android_app.models.furniture.FurnitureType
+import pk.furniture_android_app.shared.SearchOptionsFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +33,8 @@ class FurnitureListActivity : AppCompatActivity() {
     private val adapter by lazy { FurnitureRecyclerViewAdapter() }
     private var furniture: List<Furniture> = emptyList()
     private var selectedSearchOptions: HashMap<String, String?> = HashMap()
+    private var searchOptions: Map<String, List<String>> = emptyMap()
+    private val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +43,27 @@ class FurnitureListActivity : AppCompatActivity() {
         val progressBar = findViewById<ProgressBar>(R.id.listProgressBar)
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
+
+        val searchOptionsCall = SearchOptionsFactory(FurnitureType.CHAIRS).getProperApiCall()
+        searchOptionsCall.getSearchOptions().enqueue(object : Callback<Map<String, List<String>>> {
+            override fun onResponse(
+                call: Call<Map<String, List<String>>>, response: Response<Map<String, List<String>>>
+            ) {
+                val body = response.body()
+                if (body != null)
+                    searchOptions = body
+            }
+
+            override fun onFailure(call: Call<Map<String, List<String>>>, t: Throwable) {
+                Toast.makeText(
+                    this@FurnitureListActivity, "Could not get search options",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
         setupRecyclerView()
         setupSearchView()
-        setupFilterButton(FurnitureType.CHAIRS)
+        setupFilterButton()
 
         val allFurnitureCall = createProperFurnitureCall(FurnitureType.CHAIRS)
         allFurnitureCall?.enqueue(object : Callback<FurnitureResponse> {
@@ -61,13 +87,13 @@ class FurnitureListActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupFilterButton(furnitureType: FurnitureType) {
+    private fun setupFilterButton() {
         val filterButton: Button = findViewById(R.id.filterButton)
         filterButton.setOnClickListener {
             val inflater = this.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val additionalSearchOptionsView =
                 inflater.inflate(R.layout.additional_search_options, null)
-            prepareAdditionalSearchOptions(additionalSearchOptionsView, furnitureType)
+            prepareAdditionalSearchOptions(additionalSearchOptionsView)
             val alert = AlertDialog.Builder(this)
             alert.setView(additionalSearchOptionsView)
             alert.setPositiveButton("Save") { _, _ ->
@@ -80,29 +106,56 @@ class FurnitureListActivity : AppCompatActivity() {
         }
     }
 
-    private fun prepareAdditionalSearchOptions(
-        additionalSearchOptionsView: View,
-        furnitureType: FurnitureType
-    ) {
-        fillTextOfExistingOptions(additionalSearchOptionsView)
-        val autoCompleteTextView: AutoCompleteTextView =
+    private fun prepareAdditionalSearchOptions(additionalSearchOptionsView: View) {
+        val container: LinearLayout =
+            additionalSearchOptionsView.findViewById(R.id.additionalSearchOptionsContainer)
+        for (searchOption in searchOptions.keys) {
+            val textInputLayout = TextInputLayout(
+                ContextThemeWrapper(
+                    this,
+                    R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox_Dense_ExposedDropdownMenu
+                )
+            )
+            textInputLayout.boxBackgroundColor = ContextCompat.getColor(this, R.color.white)
+            textInputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
+            textInputLayout.hint = searchOption
+            val autoCompleteTextView = AutoCompleteTextView(textInputLayout.context)
+            autoCompleteTextView.setPaddingRelative(15.dp, 0, 15.dp, 0)
+            autoCompleteTextView.id = getSearchViewId("search_option_$searchOption")
+            autoCompleteTextView.isEnabled = false
+            autoCompleteTextView.inputType = EditorInfo.IME_ACTION_NONE
+            autoCompleteTextView.setTextColor(Color.parseColor("black"))
+            autoCompleteTextView.setAdapter(
+                ArrayAdapter(
+                    this,
+                    android.R.layout.simple_dropdown_item_1line,
+                    searchOptions[searchOption]?.plus("") as MutableList
+                )
+            )
+            textInputLayout.addView(autoCompleteTextView)
+            container.addView(textInputLayout)
+        }
+        val sortOption: AutoCompleteTextView =
             additionalSearchOptionsView.findViewById(R.id.sortOption)
-        autoCompleteTextView.setAdapter(
+        sortOption.setAdapter(
             ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                SortOption.values()
+                this, android.R.layout.simple_dropdown_item_1line, SortOption.values()
             )
         )
+        fillTextOfExistingOptions(additionalSearchOptionsView)
     }
 
     private fun fillTextOfExistingOptions(additionalSearchOptionsView: View) {
         for (key: String in selectedSearchOptions.keys) {
             if (key == "title") continue
-            val text: TextView = additionalSearchOptionsView.findViewById(getSearchViewId(key))
-            if (text is AutoCompleteTextView)
-                text.setText(selectedSearchOptions[key].toString(), false)
-            else
+            val text: TextView =
+                additionalSearchOptionsView.findViewById(getSearchViewId("search_option_$key"))
+            if (text is AutoCompleteTextView) {
+                if (selectedSearchOptions[key] == null)
+                    text.setText("", false)
+                else
+                    text.setText(selectedSearchOptions[key].toString(), false)
+            } else
                 text.text =
                     if (selectedSearchOptions[key] == "0.0") null else selectedSearchOptions[key]
         }
@@ -110,9 +163,11 @@ class FurnitureListActivity : AppCompatActivity() {
 
     private fun getSearchViewId(key: String): Int {
         when (key) {
-            "startPrice" -> return R.id.startPriceAlertDialog
-            "endPrice" -> return R.id.endPriceAlertDialog
-            "sortOption" -> return R.id.sortOption
+            "search_option_startPrice" -> return R.id.startPriceAlertDialog
+            "search_option_endPrice" -> return R.id.endPriceAlertDialog
+            "search_option_sortOption" -> return R.id.sortOption
+            "search_option_color" -> return R.id.search_option_color
+            "search_option_material" -> return R.id.search_option_material
         }
         throw java.lang.IllegalArgumentException("No such search option")
     }
@@ -130,6 +185,13 @@ class FurnitureListActivity : AppCompatActivity() {
             if (endPrice.text.isNullOrBlank()) "0.0" else endPrice.text.toString()
         selectedSearchOptions["sortOption"] =
             if (sortOption.text.isNullOrBlank()) null else sortOption.text.toString()
+        for (searchOption in searchOptions.keys) {
+            val searchOptionTextBox: AutoCompleteTextView =
+                additionalSearchOptionsView.findViewById(getSearchViewId("search_option_$searchOption"))
+            selectedSearchOptions[searchOption] =
+                if (searchOptionTextBox.text == null) null else searchOptionTextBox.text.toString()
+        }
+
     }
 
     private fun setupSearchView() {

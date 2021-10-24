@@ -10,4 +10,7 @@
     <string name="furniture_image_description">furniture image</string>
     <string name="check_in_3d">Check in 3d</string>
     <string name="search_options">FILTER</string>
+    <string name="search_option_start_price">Start Price</string>
+    <string name="search_option_end_price">End Price</string>
+    <string name="search_option_sort_by">Sort by</string>
 </resources>
