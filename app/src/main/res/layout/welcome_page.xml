@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/furniture_background">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/welcome"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:padding="5dp">
+
+        <Button
+            android:id="@+id/shopOffers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/light_gray"
+            android:drawableTop="@drawable/icon_shopping_trolley"
+            android:text="@string/store_offer"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/myAccount"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/light_gray"
+            android:drawableTop="@drawable/icon_my_account"
+            android:text="@string/my_account"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/myOrders"
+            app:layout_constraintTop_toBottomOf="@id/shopOffers"
+            app:layout_constraintWidth_percent="0.45" />
+
+        <Button
+            android:id="@+id/myOrders"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/light_gray"
+            android:drawableTop="@drawable/icon_shopping_basket"
+            android:text="@string/my_orders"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintLeft_toRightOf="@id/myAccount"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopOffers"
+            app:layout_constraintWidth_percent="0.45" />
+
+        <Button
+            android:id="@+id/referMyProject"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/light_gray"
+            android:drawableTop="@drawable/icon_refer_project"
+            android:text="@string/refer_my_project"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/contact"
+            app:layout_constraintTop_toBottomOf="@id/myAccount"
+            app:layout_constraintWidth_percent="0.45" />
+
+        <Button
+            android:id="@+id/contact"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/light_gray"
+            android:drawableTop="@drawable/icon_email"
+            android:text="@string/contact"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintLeft_toRightOf="@id/referMyProject"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myOrders"
+            app:layout_constraintWidth_percent="0.45" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

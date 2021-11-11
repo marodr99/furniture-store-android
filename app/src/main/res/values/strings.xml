@@ -13,4 +13,10 @@
     <string name="search_option_start_price">Start Price</string>
     <string name="search_option_end_price">End Price</string>
     <string name="search_option_sort_by">Sort by</string>
+    <string name="contact">Contact</string>
+    <string name="refer_my_project">Refer my project</string>
+    <string name="my_orders">My orders</string>
+    <string name="my_account">My account</string>
+    <string name="store_offer">Store offer</string>
+    <string name="welcome">Welcome,</string>
 </resources>
