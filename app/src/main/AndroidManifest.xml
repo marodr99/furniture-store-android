@@ -16,9 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FurnitureAndroidApp">
+        <activity android:name=".FurnitureListActivity" />
         <activity android:name=".SingleFurnitureActivity" />
         <activity android:name=".AugmentedRealityActivity" />
-        <activity android:name=".FurnitureListActivity">
+        <activity android:name=".RegisterAccountActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
