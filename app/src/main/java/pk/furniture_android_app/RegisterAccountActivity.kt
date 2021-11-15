@@ -19,7 +19,8 @@ class RegisterAccountActivity : AppCompatActivity() {
         val serviceConfig = AuthorizationServiceConfiguration(
             Uri.parse("http://192.168.0.11:8090/auth/realms/furniture-app/protocol/openid-connect/auth"),
             Uri.parse("http://192.168.0.11:8090/auth/realms/furniture-app/protocol/openid-connect/token"),
-            Uri.parse("http://192.168.0.11:8090/auth/realms/furniture-app/clients-registrations/openid-connect")
+            Uri.parse("http://192.168.0.11:8090/auth/realms/furniture-app/clients-registrations/openid-connect"),
+            Uri.parse("http://192.168.0.11:8090/auth/realms/furniture-app/protocol/openid-connect/logout")
         )
 
         val appAuthConfiguration = AppAuthConfiguration.Builder()
