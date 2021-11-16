@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/welcomeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -91,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:backgroundTint="@color/light_gray"
-            android:text="Log out"
+            android:drawableTop="@drawable/icon_logout"
+            android:text="@string/log_out"
             app:layout_constraintHeight_percent="0.15"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
