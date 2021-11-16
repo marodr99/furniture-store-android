@@ -44,7 +44,16 @@ class WelcomePageActivity : AppCompatActivity() {
                 setWelcomeText(userDetails["given_name"] as String)
                 setUpLogoutButton(authState, authService)
                 setUpMyAccountButton(userDetails["sub"] as String)
+                setUpStoreOfferButton()
             }
+        }
+    }
+
+    private fun setUpStoreOfferButton() {
+        val storeOfferButton: Button = findViewById(R.id.shopOffers)
+        storeOfferButton.setOnClickListener {
+            val storeOfferIntent = Intent(this, StoreOfferActivity::class.java)
+            startActivity(storeOfferIntent)
         }
     }
 

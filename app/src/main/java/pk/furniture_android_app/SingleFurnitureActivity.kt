@@ -13,8 +13,10 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.viewpager2.widget.ViewPager2
 import me.relex.circleindicator.CircleIndicator3
 import pk.furniture_android_app.furniture.chairs.ChairsApiService
+import pk.furniture_android_app.furniture.wardrobes.WardrobesApiService
 import pk.furniture_android_app.models.chairs.Chair
 import pk.furniture_android_app.models.furniture.FurnitureType
+import pk.furniture_android_app.models.wardrobes.Wardrobe
 import pk.furniture_android_app.shared.ViewPagerFurnitureAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,40 +43,84 @@ class SingleFurnitureActivity : AppCompatActivity() {
         val viewPager: ViewPager2 = findViewById(R.id.singleFurnitureViewPager)
 
         if (furnitureType == FurnitureType.CHAIRS) {
-            val chairsApiService =
-                RetrofitClientInstance.getRetrofitInstance()?.create(ChairsApiService::class.java)
-            val chairCall = chairsApiService?.getChair(furnitureId)
-            chairCall?.enqueue(object : Callback<Chair> {
-                override fun onResponse(
-                    call: Call<Chair>,
-                    response: Response<Chair>
-                ) {
-                    response.body()?.let {
-                        val chair = it
-                        setupSharedInfo(chair.title, chair.additionalInformation, chair.price)
-                        setup3DButton(chair.fileName)
-                        setupViewPager(viewPager, chair.imgUrl, chair.imagesUrl)
-                        val chairProperties = arrayOf(
-                            MAX_WEIGHT + chair.maxWeight.toString() + "kg",
-                            WIDTH + chair.width.toString() + "cm",
-                            HEIGHT + chair.height.toString() + "cm",
-                            DEPTH + chair.depth.toString() + "cm",
-                            COLOR + chair.color,
-                            MATERIAL + chair.material,
-                        )
-                        setupProps(chairProperties)
-                    }
-                }
-
-                override fun onFailure(call: Call<Chair>, t: Throwable) {
-                    Toast.makeText(
-                        this@SingleFurnitureActivity,
-                        "Connection error. Please try later",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
+            getSingleChairFromApiCall(furnitureId, viewPager)
+        } else if (furnitureType == FurnitureType.WARDROBES) {
+            getSingleWardrobeFromApiCall(furnitureId, viewPager)
         }
+    }
+
+    private fun getSingleWardrobeFromApiCall(furnitureId: Int, viewPager: ViewPager2) {
+        val wardrobesApiService =
+            RetrofitClientInstance.getRetrofitInstance()?.create(WardrobesApiService::class.java)
+        val wardrobeCall = wardrobesApiService?.getWardrobe(furnitureId)
+        wardrobeCall?.enqueue(object : Callback<Wardrobe> {
+            override fun onResponse(
+                call: Call<Wardrobe>,
+                response: Response<Wardrobe>
+            ) {
+                response.body()?.let {
+                    val wardrobe = it
+                    setupSharedInfo(wardrobe.title, wardrobe.additionalInformation, wardrobe.price)
+                    setup3DButton(wardrobe.fileName)
+                    setupViewPager(viewPager, wardrobe.imgUrl, wardrobe.imagesUrl)
+                    val chairProperties = arrayOf(
+                        WIDTH + wardrobe.width.toString() + "cm",
+                        HEIGHT + wardrobe.height.toString() + "cm",
+                        DEPTH + wardrobe.depth.toString() + "cm",
+                        COLOR + wardrobe.color,
+                        MATERIAL + wardrobe.material,
+                    )
+                    setupProps(chairProperties)
+                }
+            }
+
+            override fun onFailure(call: Call<Wardrobe>, t: Throwable) {
+                Toast.makeText(
+                    this@SingleFurnitureActivity,
+                    "Connection error. Please try later",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+    private fun getSingleChairFromApiCall(
+        furnitureId: Int,
+        viewPager: ViewPager2
+    ) {
+        val chairsApiService =
+            RetrofitClientInstance.getRetrofitInstance()?.create(ChairsApiService::class.java)
+        val chairCall = chairsApiService?.getChair(furnitureId)
+        chairCall?.enqueue(object : Callback<Chair> {
+            override fun onResponse(
+                call: Call<Chair>,
+                response: Response<Chair>
+            ) {
+                response.body()?.let {
+                    val chair = it
+                    setupSharedInfo(chair.title, chair.additionalInformation, chair.price)
+                    setup3DButton(chair.fileName)
+                    setupViewPager(viewPager, chair.imgUrl, chair.imagesUrl)
+                    val chairProperties = arrayOf(
+                        MAX_WEIGHT + chair.maxWeight.toString() + "kg",
+                        WIDTH + chair.width.toString() + "cm",
+                        HEIGHT + chair.height.toString() + "cm",
+                        DEPTH + chair.depth.toString() + "cm",
+                        COLOR + chair.color,
+                        MATERIAL + chair.material,
+                    )
+                    setupProps(chairProperties)
+                }
+            }
+
+            override fun onFailure(call: Call<Chair>, t: Throwable) {
+                Toast.makeText(
+                    this@SingleFurnitureActivity,
+                    "Connection error. Please try later",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 
     private fun setup3DButton(glbFileName: String?) {

@@ -24,6 +24,7 @@ import pk.furniture_android_app.models.chairs.ChairsSearchOptions
 import pk.furniture_android_app.models.furniture.Furniture
 import pk.furniture_android_app.models.furniture.FurnitureResponse
 import pk.furniture_android_app.models.furniture.FurnitureType
+import pk.furniture_android_app.models.wardrobes.WardrobesSearchOptions
 import pk.furniture_android_app.shared.SearchOptionsFactory
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +45,10 @@ class FurnitureListActivity : AppCompatActivity() {
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
 
-        val searchOptionsCall = SearchOptionsFactory(FurnitureType.CHAIRS).getProperApiCall()
+        val furnitureType: FurnitureType =
+            intent.getSerializableExtra("furnitureType") as FurnitureType
+
+        val searchOptionsCall = SearchOptionsFactory(furnitureType).getProperApiCall()
         searchOptionsCall.getSearchOptions().enqueue(object : Callback<Map<String, List<String>>> {
             override fun onResponse(
                 call: Call<Map<String, List<String>>>, response: Response<Map<String, List<String>>>
@@ -65,7 +69,7 @@ class FurnitureListActivity : AppCompatActivity() {
         setupSearchView()
         setupFilterButton()
 
-        val allFurnitureCall = createProperFurnitureCall(FurnitureType.CHAIRS)
+        val allFurnitureCall = createProperFurnitureCall(furnitureType)
         allFurnitureCall?.enqueue(object : Callback<FurnitureResponse> {
             override fun onResponse(
                 call: Call<FurnitureResponse>,
@@ -237,6 +241,12 @@ class FurnitureListActivity : AppCompatActivity() {
                     "currentPage",
                     0
                 ), ChairsSearchOptions(selectedSearchOptions)
+            )
+            FurnitureType.WARDROBES -> return furnitureApiService?.getSpecificWardrobes(
+                intent.getIntExtra(
+                    "currentPage",
+                    0
+                ), WardrobesSearchOptions(selectedSearchOptions)
             )
             else -> throw IllegalArgumentException("Furniture of type $furnitureType does not exist")
         }

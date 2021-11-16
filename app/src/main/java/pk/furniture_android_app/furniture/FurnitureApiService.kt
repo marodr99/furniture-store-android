@@ -2,6 +2,7 @@ package pk.furniture_android_app.furniture
 
 import pk.furniture_android_app.models.chairs.ChairsSearchOptions
 import pk.furniture_android_app.models.furniture.FurnitureResponse
+import pk.furniture_android_app.models.wardrobes.WardrobesSearchOptions
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -19,5 +20,11 @@ interface FurnitureApiService {
     fun getSpecificChairs(
         @Path("page") page: Int,
         @Body chairsSearchOptions: ChairsSearchOptions
+    ): Call<FurnitureResponse>
+
+    @POST("/furniture/wardrobes/specific/{page}")
+    fun getSpecificWardrobes(
+        @Path("page") page: Int,
+        @Body wardrobesSearchOptions: WardrobesSearchOptions
     ): Call<FurnitureResponse>
 }
