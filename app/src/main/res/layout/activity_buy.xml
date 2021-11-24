@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".BuyActivity">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/buyNowNameInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Name*"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowSurnameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Surname*"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/buyNowPhoneNumberInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowNameInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowPhoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:digits="0123456789+"
+            android:hint="Phone number*"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/buyNowHouseNumberInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowPhoneNumberInputLayout"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowHouseEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:digits="0123456789+"
+            android:hint="House number*"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowPhoneNumberInputLayout"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowFlatEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:digits="0123456789+"
+            android:hint="Flat number"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/buyNowStreetInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowHouseNumberInputLayout"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowStreetEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Street"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowHouseNumberInputLayout"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowPostalCodeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Postal code*"
+            android:inputType="textPostalAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/buyNowCityInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowStreetInputLayout"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowCity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="City*"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buyNowStreetInputLayout"
+        app:layout_constraintWidth_percent="0.49">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buyNowEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Email*"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/buyNowErrorMessage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buyNowCityInputLayout"
+        app:layout_constraintWidth_percent="0.2" />
+
+    <Button
+        android:id="@+id/confirmBuyButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -62,6 +62,7 @@ class SingleFurnitureActivity : AppCompatActivity() {
                     val wardrobe = it
                     setupSharedInfo(wardrobe.title, wardrobe.additionalInformation, wardrobe.price)
                     setup3DButton(wardrobe.fileName)
+                    setupBuyNowButton(furnitureId, wardrobe.price)
                     setupViewPager(viewPager, wardrobe.imgUrl, wardrobe.imagesUrl)
                     val chairProperties = arrayOf(
                         WIDTH + wardrobe.width.toString() + "cm",
@@ -100,6 +101,7 @@ class SingleFurnitureActivity : AppCompatActivity() {
                     val chair = it
                     setupSharedInfo(chair.title, chair.additionalInformation, chair.price)
                     setup3DButton(chair.fileName)
+                    setupBuyNowButton(furnitureId, chair.price)
                     setupViewPager(viewPager, chair.imgUrl, chair.imagesUrl)
                     val chairProperties = arrayOf(
                         MAX_WEIGHT + chair.maxWeight.toString() + "kg",
@@ -130,6 +132,17 @@ class SingleFurnitureActivity : AppCompatActivity() {
                 Intent(this@SingleFurnitureActivity, AugmentedRealityActivity::class.java).apply {
                     putExtra("glbFileName", glbFileName)
                 }
+            startActivity(intent)
+        }
+    }
+
+    private fun setupBuyNowButton(furnitureId: Int, price: Double) {
+        val buyNowButton: Button = findViewById(R.id.singleFurnitureBuyNow)
+        buyNowButton.setOnClickListener {
+            val intent = Intent(this, BuyActivity::class.java).apply {
+                putExtra("furnitureId", furnitureId)
+                putExtra("furniturePrice", price)
+            }
             startActivity(intent)
         }
     }

@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FurnitureAndroidApp">
-        <activity android:name=".StoreOfferActivity"></activity>
+        <activity android:name=".BuyActivity"></activity>
+        <activity android:name=".StoreOfferActivity" />
         <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
             tools:node="replace">
