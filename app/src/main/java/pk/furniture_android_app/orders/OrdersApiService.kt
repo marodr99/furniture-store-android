@@ -1,10 +1,7 @@
 package pk.furniture_android_app.orders
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface OrdersApiService {
     @POST("/orders")
@@ -17,4 +14,10 @@ interface OrdersApiService {
     fun getOrders(
         @Header("Authorization") accessToken: String
     ): Call<List<Order>>
+
+    @GET("/orders/{id}")
+    fun getOrder(
+        @Header("Authorization") accessToken: String,
+        @Path("id") orderId: Int
+    ): Call<SingleOrder>
 }

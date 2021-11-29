@@ -1,5 +1,6 @@
 package pk.furniture_android_app
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -73,6 +74,11 @@ class MyOrdersListActivity : AppCompatActivity() {
         adapter.onItemClickListener = object : OnRecyclerViewClickListener {
             override fun onItemClick(position: Int) {
                 val clickedOrder = orders[position]
+                val intent =
+                    Intent(this@MyOrdersListActivity, SingleOrderActivity::class.java).apply {
+                        putExtra("orderId", clickedOrder.orderId)
+                    }
+                startActivity(intent)
             }
         }
         recyclerView.adapter = adapter
