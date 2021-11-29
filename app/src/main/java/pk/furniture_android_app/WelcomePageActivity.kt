@@ -45,7 +45,16 @@ class WelcomePageActivity : AppCompatActivity() {
                 setUpLogoutButton(authState, authService)
                 setUpMyAccountButton(userDetails["sub"] as String)
                 setUpStoreOfferButton()
+                setUpMyOrdersButton()
             }
+        }
+    }
+
+    private fun setUpMyOrdersButton() {
+        val myOrdersButton: Button = findViewById(R.id.myOrders)
+        myOrdersButton.setOnClickListener {
+            val intent = Intent(this, MyOrdersListActivity::class.java)
+            startActivity(intent)
         }
     }
 
