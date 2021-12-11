@@ -47,7 +47,16 @@ class WelcomePageActivity : AppCompatActivity() {
                 setUpStoreOfferButton()
                 setUpMyOrdersButton()
                 setUpReferProjectButton()
+                setUpContactButton()
             }
+        }
+    }
+
+    private fun setUpContactButton() {
+        val contactButton: Button = findViewById(R.id.contact)
+        contactButton.setOnClickListener {
+            val intent = Intent(this, ContactActivity::class.java)
+            startActivity(intent)
         }
     }
 
