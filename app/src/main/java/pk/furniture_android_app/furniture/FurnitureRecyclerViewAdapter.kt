@@ -40,7 +40,7 @@ class FurnitureRecyclerViewAdapter() :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val selectedFurniture = furniture[position]
         holder.cardTitle.text = selectedFurniture.title
-        holder.cardPrice.text = selectedFurniture.price.toString() + " zł"
+        holder.cardPrice.text = String.format("%.2f", selectedFurniture.price) + " zł"
         if (selectedFurniture.imgUrl != null && selectedFurniture.imgUrl.isNotBlank())
             Glide.with(holder.itemView.context).load(selectedFurniture.imgUrl)
                 .placeholder(R.drawable.no_image_available).into(holder.cardImage)

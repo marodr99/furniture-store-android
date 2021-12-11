@@ -159,7 +159,7 @@ class SingleFurnitureActivity : AppCompatActivity() {
 
         title.text = furnitureTitle
         additionalInfo.text = furnitureAdditionalInfo
-        buyNowButton.text = "Buy now for $furniturePrice"
+        buyNowButton.text = "Buy now for " + String.format("%.2f", furniturePrice)
     }
 
     private fun setupViewPager(
