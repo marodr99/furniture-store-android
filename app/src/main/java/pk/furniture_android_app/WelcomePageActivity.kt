@@ -46,7 +46,16 @@ class WelcomePageActivity : AppCompatActivity() {
                 setUpMyAccountButton(userDetails["sub"] as String)
                 setUpStoreOfferButton()
                 setUpMyOrdersButton()
+                setUpReferProjectButton()
             }
+        }
+    }
+
+    private fun setUpReferProjectButton() {
+        val referProjectButton: Button = findViewById(R.id.referMyProject)
+        referProjectButton.setOnClickListener {
+            val intent = Intent(this, ReferProjectActivity::class.java)
+            startActivity(intent)
         }
     }
 

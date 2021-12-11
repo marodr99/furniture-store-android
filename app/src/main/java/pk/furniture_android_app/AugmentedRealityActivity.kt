@@ -17,7 +17,6 @@ import java.io.File
 import java.io.IOException
 
 class AugmentedRealityActivity : AppCompatActivity() {
-    private val FIREBASE_PATH = "chairs/"
     private val GLB_EXTENSION = ".glb"
     private var renderable: ModelRenderable? = null
 
@@ -28,7 +27,7 @@ class AugmentedRealityActivity : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         val storage = FirebaseStorage.getInstance()
         val glbFileName = intent.getStringExtra("glbFileName")
-        val modelRef = storage.reference.child(FIREBASE_PATH + glbFileName + GLB_EXTENSION)
+        val modelRef = storage.reference.child(glbFileName + GLB_EXTENSION)
 
         val arFragment = supportFragmentManager.findFragmentById(R.id.arFragment) as ArFragment
 

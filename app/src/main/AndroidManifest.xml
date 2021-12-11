@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FurnitureAndroidApp">
-        <activity android:name=".SingleOrderActivity"></activity>
+        <activity android:name=".ReferProjectActivity"></activity>
+        <activity android:name=".SingleOrderActivity" />
         <activity android:name=".MyOrdersListActivity" />
         <activity android:name=".BuyActivity" />
         <activity android:name=".StoreOfferActivity" />
