@@ -26,7 +26,7 @@ class ReferProjectActivity : AppCompatActivity() {
 
         val zipImage: ImageView = findViewById(R.id.zip_image)
         zipImage.setOnClickListener {
-            getContent.launch("application/zip")
+            getContent.launch("application/*")
         }
 
         val authState = AuthStateManager.getInstance(this).current
@@ -49,6 +49,12 @@ class ReferProjectActivity : AppCompatActivity() {
     }
 
     val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            if(contentResolver.getType(uri) != "application/zip") {
+                Toast.makeText(this, "Only zip files are allowed", Toast.LENGTH_SHORT).show()
+                return@registerForActivityResult
+            }
+        }
         val file = File.createTempFile("temp", ".zip")
         val inputStream = contentResolver.openInputStream(uri!!)
         inputStream.use { input ->
